@@ -12,6 +12,8 @@ def get_arguments() -> argparse.Namespace:
     """
     parser = argparse.ArgumentParser()
     parser.add_argument("-r", "--result", required=True, type=str, help="Путь к результирующему файлу")
+    parser.add_argument("-w", "--width", required=True, type=str, help="Ширина изображения")
+    parser.add_argument("-h", "--height", required=True, type=str, help="Высота изображения")
     return parser.parse_args()
 
 def load_random_files(folder_path):
@@ -89,11 +91,18 @@ def start_img_demo(image):
     plt.title("Исходное изображение: ")
     plt.show()
 
-
+def border(image):
+    bordered = cv2.copyMakeBorder(image, top = 15, bottom = 15, left = 15, right = 15, borderType=cv2.BORDER_CONSTANT, value = (255, 255, 255))
+    output_bordered = r"C:\Aplication Programming\Lab3\output_bordered.jpg"
+    result = cv2.imwrite(output_bordered, bordered)
+    if result:
+        print(f"Успешно сохранено в {output_bordered}")
+    else:
+        print("Ошибка сохранения файла")
+    return bordered
 
 def main():
     get_arguments()
-
     folder_path = r"C:\Aplication Programming\Lab2\covers"
     img_bgr = load_random_files(folder_path)
 
@@ -103,10 +112,10 @@ def main():
     
     output_bin = r"C:\Aplication Programming\Lab3\output_bin.jpg"
     binomize_img(img_bgr, output_bin)
-    
     resizing_img(img_bgr)
     start_size_demo(img_bgr)
-    start_img_demo(img_bgr)    
+    start_img_demo(img_bgr)   
+    border(img_bgr) 
 
 if __name__ == '__main__':
     main()
