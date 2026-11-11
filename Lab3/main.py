@@ -4,7 +4,6 @@ import argparse
 import os
 import random
 
-
 def get_arguments() -> argparse.Namespace:
     """
     Парсинг аргументов командной строки.
@@ -19,7 +18,7 @@ def load_random_files(folder_path):
 
     valid_extentions = ('.jpg')
 
-    image_files = [f for f in all_items if f.lower().endswith(valid_extentions())]
+    image_files = [f for f in all_items if f.lower().endswith(valid_extentions)]
 
     if not image_files:
         raise FileNotFoundError(f"В папке {folder_path} нет изображений")
@@ -27,20 +26,12 @@ def load_random_files(folder_path):
     random_file = random.choice(image_files)
     result = os.path.join(folder_path, random_file)
     if result:
-        print("Найден случайный файл f{random_file}")
+        print(f"Найден случайный файл {random_file}")
 
     img = cv2.imread(result)
     return img
 
-def binomize_img():
-    path = r"C:\Aplication Programming\Lab3"
-    img_filename = "book_3.jpg"
-    output_filename = "output.jpg"
-
-    input_path = os.path.join(path, img_filename)
-    output_path = os.path.join(path, output_filename)
-
-    img_bgr = cv2.imread(input_path)
+def binomize_img(img_bgr, output_path):
     gray = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2GRAY)    
     threshold = 127
     _, binomized = cv2.threshold(gray, threshold, 255, cv2.THRESH_BINARY)
@@ -48,6 +39,10 @@ def binomize_img():
     if img_bgr is None:
         raise FileNotFoundError("Не удалось открыть файл f:{input_path}")
 
+    path = r"C:\Aplication Programming\Lab3"
+    output_filename = "output.jpg"
+
+    output_path = os.path.join(path, output_filename)
     result = cv2.imwrite(output_path, binomized)
     if result:
         print(f"Успешно сохранено в: {output_path}")
@@ -87,9 +82,17 @@ def resizing_img(image):
 
 def main():
     get_arguments()
-    binomize_img()
+
+    folder_path = r"C:\Aplication Programming\Lab2\covers"
+    img_bgr = load_random_files(folder_path)
+
+    if img_bgr is None:
+        print("Не удалось загрузить картинку.")
+        return
     
-    img_bgr = cv2.imread("book_3.jpg")
+    output_bin = r"C:\Aplication Programming\Lab3\output_bin.jpg"
+    binomize_img(img_bgr, output_bin)
+    
     resizing_img(img_bgr)
     
 
