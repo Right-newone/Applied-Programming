@@ -3,6 +3,7 @@ import numpy
 import argparse
 import os
 import random
+import matplotlib.pyplot as plt
 
 def get_arguments() -> argparse.Namespace:
     """
@@ -15,9 +16,7 @@ def get_arguments() -> argparse.Namespace:
 
 def load_random_files(folder_path):
     all_items = os.listdir(folder_path)
-
     valid_extentions = ('.jpg')
-
     image_files = [f for f in all_items if f.lower().endswith(valid_extentions)]
 
     if not image_files:
@@ -40,7 +39,7 @@ def binomize_img(img_bgr, output_path):
         raise FileNotFoundError("Не удалось открыть файл f:{input_path}")
 
     path = r"C:\Aplication Programming\Lab3"
-    output_filename = "output.jpg"
+    output_filename = "output_bin.jpg"
 
     output_path = os.path.join(path, output_filename)
     result = cv2.imwrite(output_path, binomized)
@@ -80,6 +79,18 @@ def resizing_img(image):
     
     return new_size_img
 
+def start_size_demo(image):
+    print(f"Исходные размеры изображения: {image.shape[0], image.shape[1]}")
+
+def start_img_demo(image):
+    rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB) 
+    plt.imshow(rgb)
+    plt.axis("off")
+    plt.title("Исходное изображение: ")
+    plt.show()
+
+
+
 def main():
     get_arguments()
 
@@ -94,7 +105,8 @@ def main():
     binomize_img(img_bgr, output_bin)
     
     resizing_img(img_bgr)
-    
+    start_size_demo(img_bgr)
+    start_img_demo(img_bgr)    
 
 if __name__ == '__main__':
     main()
